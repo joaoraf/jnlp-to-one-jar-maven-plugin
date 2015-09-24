@@ -1,6 +1,7 @@
 package br.nom.nicola.joao.jnlpdependencies
 
 import java.io.File
+
 import java.net.URL
 import java.util.jar.JarOutputStream
 import java.util.jar.Pack200
