@@ -35,6 +35,9 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
   @Parameter(property="jnlpDependencies.url",required = true)
   private var jnlpUrl: URL = _
 
+  @Parameter
+  private var excludePatterns : Array[String] = null
+  
   @Component
   private var session: MavenSession = _
 
@@ -77,6 +80,8 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
     tmpDir.mkdirs()
     val codeBase = jnlp.codebase.map(u => new URL(u + "/").toURI.normalize.toURL)
     info(s"codeBase = ${codeBase}")    
+    val excludes = Option(excludePatterns).getOrElse(Array()).map(_.r)
+    def isExcluded(name : String) = excludes.exists(r => r.findFirstMatchIn(name).isDefined)
     val jars = jnlp.resources.filter(_.os == None).map(_.resourcesoption) flatMap { res =>
       val props = res.map(_.value).collect({ case p : Property => (p.name,p.value) }).toMap      
       res.map(_.value) collect { case x : Jar => (props,x) } 
@@ -87,7 +92,7 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
       info(s"jar: download=${jar.download}, href=${jar.href}, main=${jar.main}, part=${jar.part}, size=${jar.size}, version=${jar.version}, pack=${pack}")
       val url = codeBase.map(new URL(_,jar.href + suffix)).getOrElse(new URL(jar.href + suffix))
       (url -> (props,jar))
-    }).toMap
+    }).toMap.filterKeys(url => !isExcluded(url.getFile))
                     
     val jarMap2 = jarMap.map({case (url,(props,jar)) =>
       import java.io._
