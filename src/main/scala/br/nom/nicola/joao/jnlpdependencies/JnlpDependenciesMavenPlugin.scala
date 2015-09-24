@@ -53,6 +53,9 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
   @Parameter(defaultValue = "${project.build.directory}", readonly = true)
   private var target: File = _
   
+  @Parameter
+  private var mainClassName : String = _
+  
   def info(s : String) = getLog().info("build-onejar: " + s)
   
   def execute(): Unit = {
@@ -71,11 +74,13 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
   val packSuffix = ".pack.gz"
   
   def process(jnlp : Jnlp/*, project: MavenProject */) : Unit = {
-    val mainClass = jnlp.jnlpoption.value match {
-      case d : Applicationu45desc =>
-         d.mainu45class.getOrElse("")
-      case _ => ""
-    }
+    val mainClass = if(mainClassName == null) {
+      jnlp.jnlpoption.value match {      
+        case d : Applicationu45desc =>
+           d.mainu45class.getOrElse("")
+        case _ => ""
+      }
+    } else { mainClassName }
     val tmpDir = new File(target,"jnlp-dependencies")
     tmpDir.mkdirs()
     val codeBase = jnlp.codebase.map(u => new URL(u + "/").toURI.normalize.toURL)

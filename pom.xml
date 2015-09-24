@@ -4,7 +4,7 @@
 
 	<groupId>br.nom.nicola.joao.tools</groupId>
 	<artifactId>jnlp-to-one-jar-maven-plugin</artifactId>
-	<version>1.1.2-SNAPSHOT</version>
+	<version>1.2.0-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>JNLP retriever</name>
