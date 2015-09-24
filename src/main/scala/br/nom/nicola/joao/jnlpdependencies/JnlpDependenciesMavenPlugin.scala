@@ -28,7 +28,7 @@ import br.nom.nicola.joao.jnlpdependencies.jar.SignatureRemovalDecider
 import br.nom.nicola.joao.jnlpdependencies.jar.InterceptingJarOutputStream
 
 
-@Mojo(name = "download-jnlp-dependencies")
+@Mojo(name = "build-onejar")
 class JnlpDependenciesMavenPlugin extends AbstractMojo {
 
   @Parameter(property="jnlpDependencies.url",required = true)
@@ -39,8 +39,7 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
 
   @Component
   private var project: MavenProject = _
-  
-  
+    
   @Component
   private var pluginManager : BuildPluginManager = _;
  
@@ -50,16 +49,9 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
   @Parameter(defaultValue = "${project.build.directory}", readonly = true)
   private var target: File = _
   
-  def info(s : String) = getLog().info("download-jnlp-dependencies: " + s)
+  def info(s : String) = getLog().info("build-onejar: " + s)
   
   def execute(): Unit = {
-    
-      info("execute: starting")
-      info(s"jnlpUrl = $jnlpUrl")      
-      info(s"session = $session")
-      info(s"project = $project")
-      info(s"baseDir=${basedir}")
-      info(s"target=${target}")
       import scala.collection.JavaConversions._
       if(jnlpUrl == null) {
         throw new RuntimeException("jnrl url must be given!")
@@ -68,7 +60,6 @@ class JnlpDependenciesMavenPlugin extends AbstractMojo {
       val jnlpXml = XML.load(jnlpUrl)
       val jnlp = scalaxb.fromXML[Jnlp](jnlpXml)
       process(jnlp);//,project)      
-      info("execute: ending")
       project.getProjectReferences
       
   }

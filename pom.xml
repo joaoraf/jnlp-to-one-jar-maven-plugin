@@ -4,18 +4,26 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>br.nom.nicola.joao.tools</groupId>
-	<artifactId>jnlp-dependencies-maven-plugin</artifactId>
+	<artifactId>jnlp-to-one-jar-maven-plugin</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>maven-plugin</packaging>
 
 	<name>JNLP retriever</name>
+	
+	<scm>
+		<url>https://github.com/joaoraf/${project.artifactId}</url>
+		<developerConnection>scm:git:https://github.com/joaoraf/${project.artifactId}.git</developerConnection>
+		<connection>scm:git:https://github.com/joaoraf/${project.artifactId}.git</connection>
+		<tag>HEAD</tag>
+	</scm>
 
 	<properties>
 		<scala.version>2.11</scala.version>
 		<scala.lib.version>${scala.version}.7</scala.lib.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
+		<!-- github server corresponds to entry in ~/.m2/settings.xml -->
+		<github.global.server>github</github.global.server>
 	</properties>
 
 	<build>
